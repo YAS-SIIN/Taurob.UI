@@ -1,12 +1,12 @@
 import './App.css';
-import { Mission } from './features/mission/Mission';
+import { Missions } from './features/missions/Missions';
 
 function App() {
   return (
     <div className="App">
       <h3>Taurob challenge test - programmer : Yasin Asadnezhad</h3>  
       
-     <Mission />
+     <Missions />
     </div>
   );
 }

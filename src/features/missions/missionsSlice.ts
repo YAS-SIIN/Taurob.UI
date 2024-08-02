@@ -16,7 +16,7 @@ const initialState : InitialStateModel<Mission> = {
  * Thunk to get missions list in redux
  */
 export const getMissionsList = createAsyncThunk("getMissions", async () => {
-   
+   debugger
   //call getMissions service method
   const res = await missionsService.getMissions();
   return res;
