@@ -5,8 +5,9 @@ import { Button, Spinner } from 'react-bootstrap';
 import Alert from 'react-bootstrap/Alert';
 import Card from 'react-bootstrap/Card';
 import DataTable from 'react-data-table-component';
-import { useAppSelector } from '../../app/hooks';
-import { Mission } from '../../utils/models';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { MissionResponse } from '../../utils/models';
+import { deleteMission, getMissionsList } from './missionsSlice';
 
 /**
  * Mission page with data
@@ -14,16 +15,24 @@ import { Mission } from '../../utils/models';
  */
 export function Missions() {
   const columns = [
-    { name: 'name', selector: (row: Mission) => row.name },
+    { name: 'Mission name', selector: (row: MissionResponse) => row.name },
+    { name: 'Robot name', selector: (row: MissionResponse) => row.robotResponse.name },
+    { name: 'Robot model name', selector: (row: MissionResponse) => row.robotResponse.modelname },
     {
-      name: 'Actions', cell: (props: Mission) => (
-        <><Button variant="warning">Edit</Button></>)
-    }
+      name: 'Actions', cell: (row: MissionResponse) => (
+        <>
+          <Button variant="warning">Edit</Button>
+          <Button variant="danger">Delete</Button>
+        </>)
+    },
   ];
 
-  let _mission: Mission = new Mission();
-  
+  let _mission: MissionResponse = new MissionResponse();
+
+  const dispatch = useAppDispatch();
   const [mission, setMission] = useState(_mission);
+  
+
   const {
     responseModelList,
     loading,
@@ -33,8 +42,13 @@ export function Missions() {
 
   useEffect(() => {
     debugger
-  
-  }, []);
+    dispatch(getMissionsList());
+
+    if (dataChanged) {
+      dispatch(getMissionsList());
+    }
+
+  }, [dispatch, dataChanged]);
 
   return (
     <div>
@@ -58,3 +72,11 @@ export function Missions() {
     </div>
   );
 }
+function createMission(mission: MissionResponse): any {
+  throw new Error('Function not implemented.');
+}
+
+function updateMission(mission: MissionResponse): any {
+  throw new Error('Function not implemented.');
+}
+

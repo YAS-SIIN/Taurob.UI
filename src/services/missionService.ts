@@ -1,4 +1,4 @@
-import { Mission, ResponseModel } from "../utils/models";
+import { MissionResponse, ResponseModel } from "../utils/models";
 
  
 
@@ -6,8 +6,7 @@ import { Mission, ResponseModel } from "../utils/models";
  * call getMissions Rest Api from back-end server to retrieve list of mission  
  * @returns list of mission 
  */
-const getMissions = async () : Promise<ResponseModel<Mission[]>> => {
-  console.log(process.env.REACT_APP_API_URL);
+const getMissions = async () : Promise<ResponseModel<MissionResponse[]>> => {
   //call getMission Rest API from server
   const response = await fetch(`${process.env.REACT_APP_API_URL}/Api/Mission`, {
     method: 'GET',
@@ -25,7 +24,7 @@ const getMissions = async () : Promise<ResponseModel<Mission[]>> => {
  * @param {number} id - id
  * @returns a mission 
  */
-const getMissionById = async (id: number) : Promise<ResponseModel<Mission>> => {
+const getMissionById = async (id: number) : Promise<ResponseModel<MissionResponse>> => {
   console.log(process.env.REACT_APP_API_URL);
   //call getMission Rest API from server
   const response = await fetch(`${process.env.REACT_APP_API_URL}/Api/Mission/${id}`, {
@@ -41,10 +40,10 @@ const getMissionById = async (id: number) : Promise<ResponseModel<Mission>> => {
 
 /** 
  * call createMission Rest Api from back-end server to create new mission  
- * @param {Mission} Mission - object of mission data 
+ * @param {MissionResponse} Mission - object of mission data 
  * @returns new mission 
  */
-const createMission = async (_inputData: Mission = new Mission()) => {
+const createMission = async (_inputData: MissionResponse = new MissionResponse()) => {
   
   //call createMission Rest API from server
   const response = await fetch(`${process.env.REACT_APP_API_URL}/Api/Mission`, {
@@ -60,9 +59,9 @@ const createMission = async (_inputData: Mission = new Mission()) => {
   
 /** 
  * call updateMission Rest Api from back-end server to update mission  
- * @param {Mission} Mission - object of mission data 
+ * @param {MissionResponse} Mission - object of mission data 
  */
-const updateMission = async (_inputData: Mission = new Mission()) => {
+const updateMission = async (_inputData: MissionResponse = new MissionResponse()) => {
   
   //call updateMission Rest API from server
   const response = await fetch(`${process.env.REACT_APP_API_URL}/Api/Mission`, {

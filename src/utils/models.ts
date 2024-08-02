@@ -1,31 +1,11 @@
- 
-/**
- * Mission
- * @typedef Mission
- * @type {object}
- * @property {number} id - id
- * @property {string} title - Mission title
- * @property {number} status - Mission status
- */
-export class Mission {
-  /**
-   * Mission name
-   */
-  name!: string;
-
-  /**
-   * Mission robotId
-   */
-  robotId!: number;
-
-};
 
 
 /**
  * Base Response 
  * @typedef BaseResponseModel
  * @type {object}
- * @property {string} message - message
+ * @property {number} id - id
+ * @property {string} description - description
  */
 export class BaseResponseModel {
   /**
@@ -39,13 +19,61 @@ export class BaseResponseModel {
   description!: string;
 }
   
+ 
+/**
+ * MissionResponse
+ * @typedef MissionResponse
+ * @type {object}
+ * @property {string} name - name
+ * @property {number} robotId - robotId
+ * @property {RobotResponse} robot - robot
+ */
+export class MissionResponse extends BaseResponseModel {
+  /**
+   * Mission name
+   */
+  name!: string;
+
+  /**
+   * Mission robotId
+   */
+  robotId!: number;
+
+  /**
+   * Mission robot
+   */
+  robotResponse!: RobotResponse;
+
+};
+
+ 
+/**
+ * RobotResponse
+ * @typedef RobotResponse
+ * @type {object}
+ * @property {string} name - name
+ * @property {number} robotId - robotId
+ */
+export class RobotResponse extends BaseResponseModel {
+  /**
+   * Robot name
+   */
+  name!: string;
+
+  /**
+   * Robot modelname
+   */
+  modelname!: string;
+};
+
+
 /**
  * Mission Response 
  * @typedef MissionResponseModel
  * @type {object}
- * @property {Mission} data - Missions data list
+ * @property {MissionResponse} data - Missions data list
  */
-export class ResponseModel<T> extends BaseResponseModel {
+export class ResponseModel<T> {
   /**
    * Missions data list
    */

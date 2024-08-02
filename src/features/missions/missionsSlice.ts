@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import missionsService from "../../services/missionService";
-import { InitialStateModel, Mission, ResponseModel } from "../../utils/models";
+import { InitialStateModel, MissionResponse, ResponseModel } from "../../utils/models";
 
 
-const initialState : InitialStateModel<Mission> = {
-  responseModelList: new ResponseModel<Mission[]>,
-  responseModelRow: new ResponseModel<Mission>,
+const initialState : InitialStateModel<MissionResponse> = {
+  responseModelList: new ResponseModel<MissionResponse[]>,
+  responseModelRow: new ResponseModel<MissionResponse>,
   loading: false,
   error: false,
   dataChanged: false,
@@ -19,6 +19,7 @@ export const getMissionsList = createAsyncThunk("getMissions", async () => {
    debugger
   //call getMissions service method
   const res = await missionsService.getMissions();
+  debugger
   return res;
 });
 
@@ -34,9 +35,9 @@ export const getMissionById = createAsyncThunk("getMissionById", async (id: numb
 
 /**
  * Thunk to create mission in redux
- * @param {Mission} _inputData - object of mission data
+ * @param {MissionResponse} _inputData - object of mission data
  */
-export const createMission = createAsyncThunk("createMission", async (_inputData: Mission = new Mission()) => {
+export const createMission = createAsyncThunk("createMission", async (_inputData: MissionResponse = new MissionResponse()) => {
    
   //call getMissions service method
   const res = await missionsService.createMission(_inputData);
@@ -45,9 +46,9 @@ export const createMission = createAsyncThunk("createMission", async (_inputData
 
 /**
  * Thunk to update mission in redux
- * @param {Mission} _inputData - object of mission data
+ * @param {MissionResponse} _inputData - object of mission data
  */
-export const updateMission = createAsyncThunk("updateMission", async (_inputData: Mission = new Mission()) => {
+export const updateMission = createAsyncThunk("updateMission", async (_inputData: MissionResponse = new MissionResponse()) => {
    
   //call getMissions service method
   const res = await missionsService.updateMission(_inputData);
