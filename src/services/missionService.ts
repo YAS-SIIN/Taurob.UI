@@ -3,10 +3,10 @@ import { Mission, ResponseModel } from "../utils/models";
  
 
 /** 
- * call getMission Rest Api from back-end server to retrieve list of mission  
+ * call getMissions Rest Api from back-end server to retrieve list of mission  
  * @returns list of mission 
  */
-const getMission = async () : Promise<ResponseModel<Mission[]>> => {
+const getMissions = async () : Promise<ResponseModel<Mission[]>> => {
   console.log(process.env.REACT_APP_API_URL);
   //call getMission Rest API from server
   const response = await fetch(`${process.env.REACT_APP_API_URL}/Api/Mission`, {
@@ -96,7 +96,7 @@ const deleteMission = async (id: number) => {
  
 
 const missionService = {
-  getMission,
+  getMissions: getMissions,
   getMissionById,
   createMission,
   updateMission,

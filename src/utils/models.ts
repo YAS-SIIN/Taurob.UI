@@ -76,3 +76,23 @@ export class ResponseModel<T> extends BaseResponseModel {
   
 }
 
+
+/**
+ * Initial State 
+ * @typedef InitialStateModel
+ * @type {object}
+ * @property {ResponseModel} responseModelList - response data list
+ * @property {ResponseModel} responseModelRow - response data
+ * @property {boolean} loading - loading
+ * @property {boolean} error - error
+ * @property {boolean} dataChanged - dataChanged
+ */
+export class InitialStateModel<T>  {
+  responseModelList!: ResponseModel<T[]>;
+  responseModelRow!: ResponseModel<T>;
+  loading!: boolean;
+  error!: boolean;
+  dataChanged!: boolean;
+  message!: string;
+}
+ 
