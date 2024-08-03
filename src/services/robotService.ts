@@ -32,7 +32,8 @@ const getRobots = async (): Promise<ResponseModel<RobotResponse[]>> => {
       statusCode: 500,
       resultCode: -1,
       errorDetail: errorMessage,
-      errors: []
+      errors: [],
+      errorDescription: ''
     };
   }
 };

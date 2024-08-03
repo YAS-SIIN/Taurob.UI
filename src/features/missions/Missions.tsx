@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
 
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Form, Row, Spinner } from 'react-bootstrap';
+import { Button, Col, Form, FormControlProps, Row, Spinner } from 'react-bootstrap';
 import Alert from 'react-bootstrap/Alert';
 import Card from 'react-bootstrap/Card';
 import DataTable from 'react-data-table-component';
@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { MissionResponse, ResponseModel, RobotResponse } from '../../utils/models';
 import { createMission, deleteMission, getMissionsList, updateMission } from './missionsSlice';
 import robotService from '../../services/robotService';
+import { toast } from 'react-toastify';
 
 /**
  * Mission page with data
@@ -28,7 +29,7 @@ export function Missions() {
     },
   ];
 
-  let initialMissionState: MissionResponse = {
+  var initialMissionState: MissionResponse = {
     id: 0,
     name: '',
     robotId: 0,
@@ -46,7 +47,8 @@ export function Missions() {
     statusCode: 0,
     resultCode: 0,
     errorDetail: '',
-    errors: []
+    errors: [],
+    errorDescription: ''
   };
 
   const dispatch = useAppDispatch();
@@ -57,13 +59,16 @@ export function Missions() {
 
 
   const getRobotsList = async () => {
-    let res = robotService.getRobots();
-    setRobots(await res);
+    try {
+      const res = await robotService.getRobots();
+      setRobots(res);
+    } catch (error) {
+      toast.error('Failed to fetch robots.');
+    }
   };
 
   const handleSubmit = () => {
     try {
-      debugger
       if (mission) {
         if (saveMode === 'New') {
           dispatch(createMission(mission));
@@ -72,32 +77,53 @@ export function Missions() {
         }
       }
     } catch (error) {
-      alert('An unexpected error occurred.');
+      toast.error('An unexpected error occurred.');
     }
   };
 
   const handleBack = () => {
-    initialMissionState = new MissionResponse();
+    initialMissionState = {
+      id: 0,
+      name: '',
+      robotId: 0,
+      robotResponse: {
+        id: 0,
+        name: '',
+        modelname: '',
+        description: ''
+      },
+      description: ''
+    };
     setMission(initialMissionState);
     setCreateEditVisible(false);
   };
 
 
-  const handleDelete = (e: any, rowId: number) => {
-    e.preventDefault();
+  const handleDelete = (e: any, rowId: number) => {   e.preventDefault();
     try {
       if (confirm('Are you sure?')) {
         dispatch(deleteMission(rowId));
       }
     } catch (error) {
-      alert('An unexpected error occurred while deleting the mission.');
+      toast.error('An unexpected error occurred while deleting the mission.');
     }
   };
 
   const handleEdit = (e: any, row: MissionResponse) => {
     e.preventDefault();
-    debugger
     initialMissionState = row;
+    initialMissionState = {
+      id: row.id,
+      name: row.name,
+      robotId: row.robotId,
+      robotResponse: {
+        id: row.robotResponse.id,
+        name: row.robotResponse.name,
+        modelname: row.robotResponse.modelname,
+        description: row.robotResponse.description
+      },
+      description: row.description
+    };
     setMission(initialMissionState);
     setSaveMode('Edit');
     setCreateEditVisible(true);
@@ -105,10 +131,31 @@ export function Missions() {
   };
 
   const handleNew = () => {
-    initialMissionState = new MissionResponse();
+    
+    initialMissionState = {
+      id: 0,
+      name: '',
+      robotId: 0,
+      robotResponse: {
+        id: 0,
+        name: '',
+        modelname: '',
+        description: ''
+      },
+      description: ''
+    };
     setMission(initialMissionState);
     setSaveMode('New');
     setCreateEditVisible(true);
+  };
+
+  const handleChange = (e: React.ChangeEvent<any>) => {    
+    const { id, value } = e.target;
+    let newId: string = id.charAt(0).toLowerCase() + id.slice(1);
+    setMission(prevState => ({
+      ...prevState,
+      [newId]: newId === 'robotId' ? parseInt(value) : value
+    }));
   };
 
   const {
@@ -120,23 +167,32 @@ export function Missions() {
   } = useAppSelector((state) => state.missionsReducer);
 
   useEffect(() => {
-
     dispatch(getMissionsList());
     getRobotsList();
 
     if (dataChanged) {
-      debugger
-      if (error || responseModelRow.statusCode !== 200) {
-        alert(responseModelRow.errorDetail || 'An error occurred.');
+      
+      if (error  || responseModelRow.statusCode !== 200) {
+        let errorMessage = responseModelRow.errorDescription || 'An error occurred.';
+        if (responseModelRow.errors.length != 0) {
+          errorMessage += ' | ';
+          debugger
+          Object.keys(responseModelRow.errors).forEach(function(key:any, index: any) {
+            debugger
+            const errorArray = responseModelRow.errors[key] as string[];
+            errorArray.forEach((b: string) => {
+              errorMessage += b + ' | ';
+            });
+          }); 
+        }
+        toast.error(errorMessage);
         return;
       } else {
-        alert('Action done successfully.');
+        toast.success('Action done successfully.');
         dispatch(getMissionsList());
-        handleBack();
+        setCreateEditVisible(false);
       }
     }
-
-
   }, [dispatch, dataChanged,]);
 
   return (
@@ -184,14 +240,14 @@ export function Missions() {
           <Form>
             <Row>
               <Col>
-
+           
                 <label>Name :</label>
-                <Form.Control type="text" id="Name" placeholder="Mission name" value={mission.name} onChange={(e) => { e.preventDefault(); initialMissionState.name = e.target.value; setMission(initialMissionState); }} />
+                <Form.Control type="text" id="Name" placeholder="Mission name" value={mission.name} onChange={handleChange} />
               </Col>
               <Col>
                 <label>Robot : </label >
 
-                <Form.Select value={mission.robotId} onChange={(e) => { e.preventDefault(); initialMissionState.robotId = parseInt(e.target.value); setMission(initialMissionState); }}>
+                <Form.Select id="RobotId" value={mission.robotId} onChange={handleChange}>
                   <option value="">Select a robot</option>
                   {robots?.data.map(robot => (
                     <option key={robot.id} value={robot.id}>{robot.name}</option>
@@ -203,7 +259,7 @@ export function Missions() {
               <Col>
 
                 <label>Description :</label>
-                <Form.Control type="text" id="Description" placeholder="Mission description" value={mission.description} onChange={(e) => { e.preventDefault(); initialMissionState.description = e.target.value; setMission(initialMissionState); }} />
+                <Form.Control type="text" id="Description" placeholder="Mission description" value={mission.description} onChange={handleChange} />
               </Col>
 
             </Row>

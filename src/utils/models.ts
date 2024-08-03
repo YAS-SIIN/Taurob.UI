@@ -98,6 +98,12 @@ export class ResponseModel<T> {
   
   
   /**
+   * Response error detail
+   */
+  errorDescription!: string;
+  
+  
+  /**
    * Response errors
    */
   errors!: [];

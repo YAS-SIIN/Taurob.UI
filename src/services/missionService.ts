@@ -31,7 +31,8 @@ const getMissions = async (): Promise<ResponseModel<MissionResponse[]>> => {
       statusCode: 500,
       resultCode: -1,
       errorDetail: errorMessage,
-      errors: []
+      errors: [],
+      errorDescription: ''
     };
   }
 };
@@ -62,7 +63,6 @@ const getMissionById = async (id: number) : Promise<ResponseModel<MissionRespons
  * @returns new mission 
  */
 const createMission = async (_inputData: MissionResponse = new MissionResponse()) : Promise<ResponseModel<MissionResponse>>  => {
-  debugger
   //call createMission Rest API from server
   const response = await fetch(`${process.env.REACT_APP_API_URL}/Api/Mission`, {
     method: 'POST',

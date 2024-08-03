@@ -103,13 +103,11 @@ const missionsSlice = createSlice({
       state.dataChanged = false;
     });
     builder.addCase(createMission.fulfilled, (state, action) => {   
-      debugger
       state.responseModelRow = action.payload;
       state.loading = false; 
       state.dataChanged = true;
     });
     builder.addCase(createMission.rejected, (state, action) => { 
-      debugger
       state.error = true;
       state.dataChanged = false;
     });
@@ -120,13 +118,11 @@ const missionsSlice = createSlice({
       state.dataChanged = false;
     });
     builder.addCase(updateMission.fulfilled, (state, action) => {
-      debugger          
       state.loading = false; 
       state.responseModelRow = action.payload;
       state.dataChanged = true;
     });
     builder.addCase(updateMission.rejected, (state, action) => {  
-      debugger    
       state.error = true;
       state.dataChanged = false;
     });
