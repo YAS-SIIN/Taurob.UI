@@ -1,5 +1,5 @@
 # Taurob UI in react TypeScript
 
-![alt text](https://github.com/YAS-SIIN/crud-test-csharp/blob/master/Taurob-Frontend.PNG?raw=true)
+![alt text](https://github.com/YAS-SIIN/Taurob.UI/blob/master/Taurob-Frontend.png?raw=true)
 
 
